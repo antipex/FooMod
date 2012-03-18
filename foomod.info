@@ -1,0 +1,4 @@
+name = FooMod
+version = 0.1
+description = Strictly for experimental purposes.
+core = 7.x

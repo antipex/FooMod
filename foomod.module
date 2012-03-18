@@ -1,0 +1,86 @@
+<?php
+/**
+ * @file
+ * A module that is strictly for experimental purposes. Watch your step!
+ */
+
+/**
+ * Implements hook_menu().
+ */
+function foomod_menu() {
+  $items = array();
+
+  $items['admin/foomod'] = array(
+    'title' => 'FooMod',
+    'description' => 'Configuration for FooMod module',
+    'page callback' => 'foomod_form',
+    'access arguments' => array('access administration pages'),
+    'type' => MENU_NORMAL_ITEM,
+  );
+
+  return $items;
+}
+
+/**
+ * Form function
+ */
+function foomod_form() {
+  return drupal_get_form('foomod_number_form');
+}
+
+/**
+ * Form builder function
+ */
+function foomod_number_form($form, &$form_state) {
+  $form['foomod_first_value'] = array(
+    '#type' => 'textfield',
+    '#title' => t('First Value'),
+    '#size' => 2,
+    '#maxlength' => 2,
+    '#description' => t('The first value to add.'),
+    '#required' => TRUE,
+  );
+  
+  $form['foomod_second_value'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Second Value'),
+    '#size' => 2,
+    '#maxlength' => 2,
+    '#description' => t('The second value to add.'),
+    '#required' => TRUE,
+  );
+  
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Add the Numbers',
+  );
+  
+  return $form;
+}
+
+/**
+ * Form validation
+ */
+function foomod_number_form_validate($form, &$form_state){
+  $first_value = $form_state['values']['foomod_first_value'];
+  $second_value = $form_state['values']['foomod_second_value'];
+  
+  if ($first_value && !ctype_digit($first_value)){
+    form_set_error('first_value', t('First value must be a number.'));
+  } 
+  
+  if ($second_value && !ctype_digit($second_value)){
+    form_set_error('second_value', t('Second value must be a number.'));
+  }
+}
+
+/**
+ * Submit function to add the numbers
+ */
+function foomod_number_form_submit($form, &$form_state) {
+  // Add the two numbers together from the form
+  $sum = $form_state['values']['foomod_first_value'] + $form_state['values']['foomod_second_value'];
+  
+  // Display a message with the sum
+  drupal_set_message(t("The sum of the numbers is {$sum}"));
+}
